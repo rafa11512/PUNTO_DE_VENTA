@@ -86,10 +86,10 @@ return [
         'pgsql' => [                                //PostgreSql
             'driver' => 'pgsql',
             'host' => env('DB_PG_HOST', '127.0.0.1'),
-            'port' => env('DB_PG_PORT', '12001'),
+            'port' => env('DB_PG_PORT', '5432'),
             'database' => env('DB_PG_DATABASE', 'punto_de_venta'),
-            'username' => env('DB_PG_USERNAME', 'postgres'),
-            'password' => env('DB_PG_PASSWORD', '7500'),
+            'username' => env('DB_PG_USERNAME', 'Usuario_web'),
+            'password' => env('DB_PG_PASSWORD', '6789'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
