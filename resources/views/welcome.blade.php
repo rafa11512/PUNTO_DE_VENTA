@@ -34,6 +34,10 @@
     <h3>Primer commit o cambio desde otro dispositivo</h3>
 
 
+
+
+    <h1>rodrigo view1</h1>
+
 </body>
 
 </html>
