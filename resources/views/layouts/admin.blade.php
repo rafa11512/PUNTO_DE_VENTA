@@ -52,16 +52,16 @@
                     </li>
 
                     <li>
-                        <a href="#"
-                            class="nav-item flex items-center p-3 rounded-lg text-slate-300 hover:text-white transition-colors">
+                        <a href="{{ route('admin.categorias.index') }}"
+                            class="nav-item flex items-center p-3 rounded-lg transition-colors {{ request()->routeIs('admin.categorias*') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white' }}">
                             <i class="fa-solid fa-tags w-6 text-center"></i>
                             <span class="ml-3">Categorias</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="#"
-                            class="nav-item flex items-center p-3 rounded-lg text-slate-300 hover:text-white transition-colors">
+                        <a href="{{ route('admin.productos.index') }}"
+                            class="nav-item flex items-center p-3 rounded-lg transition-colors {{ request()->routeIs('admin.productos*') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white' }}">
                             <i class="fa-solid fa-box-open w-6 text-center"></i>
                             <span class="ml-3">Productos</span>
                         </a>

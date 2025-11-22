@@ -5,7 +5,11 @@ use App\Http\Controllers\AdminController; // Controlador para la gestion del adm
 use App\Http\Controllers\ClientController; // Controlador para la gestion de la tienda por el cliente
 use App\Http\Controllers\AdminClientController;// Controlador para la gestion de clientes por el admin
 
-// 1. Si entran a la raíz, los mandamos al login
+// Importaciones para Categorias y Productos (Admin)
+use App\Http\Controllers\AdminCategoryController; 
+use App\Http\Controllers\AdminProductController;
+
+// Si entran a la raiz, los mandamos al login
 Route::get('/', function () {
     return redirect()->route('client.home');
 });
@@ -27,11 +31,16 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::resource('clientes', AdminClientController::class);
+
+    // NUEVO: Gestion de Categorias y Productos --- Esto habilita las rutas index, create, store, edit, update, destroy automaticamente
+    Route::resource('categorias', AdminCategoryController::class);
+    Route::resource('productos', AdminProductController::class);
     });
 
     // --- GRUPO DE RUTAS DEL CLIENTE ---
     Route::prefix('cliente')->name('client.')->group(function () {
     Route::get('/inicio', [ClientController::class, 'index'])->name('home');
     });
+    
 
 });
