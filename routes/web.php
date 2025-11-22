@@ -1,14 +1,37 @@
 <?php
-
-use App\Models\Producto;
-use App\Models\Cliente;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController; // Controlador para la autenticacion (login, registro, logout)
+use App\Http\Controllers\AdminController; // Controlador para la gestion del admin
+use App\Http\Controllers\ClientController; // Controlador para la gestion de la tienda por el cliente
+use App\Http\Controllers\AdminClientController;// Controlador para la gestion de clientes por el admin
 
+// 1. Si entran a la raíz, los mandamos al login
 Route::get('/', function () {
+    return redirect()->route('client.home');
+});
 
-    $productos = Producto::all();
-    $clientes  = Cliente::all();
+// Rutas PUblicas (Login, Registro y TIENDA)
+// RUTA DE LA PAGINA    CONTOLLER      FUNCION DENTRO DEL CONTROLLER     NOMMBRE DE LA RUTA
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    return view('welcome', compact('productos', 'clientes'));
+Route::get('/registro', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/registro', [AuthController::class, 'register'])->name('register.submit');
 
-})->name('view_home');
+Route::get('/tienda', [ClientController::class, 'index'])->name('client.home');
+
+Route::middleware(['auth'])->group(function () {
+
+    // --- GRUPO DE RUTAS DEL ADMINISTRADOR ---
+    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::resource('clientes', AdminClientController::class);
+    });
+
+    // --- GRUPO DE RUTAS DEL CLIENTE ---
+    Route::prefix('cliente')->name('client.')->group(function () {
+    Route::get('/inicio', [ClientController::class, 'index'])->name('home');
+    });
+
+});

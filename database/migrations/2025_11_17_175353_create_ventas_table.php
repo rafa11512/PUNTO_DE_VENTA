@@ -5,20 +5,26 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void {
-        Schema::create('ventas', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('cliente_id')->nullable();
-            $table->unsignedBigInteger('usuario_id')->nullable();
-            $table->decimal('total', 10, 2);
-            $table->dateTime('fecha')->default(now());
-            $table->string('metodo_pago')->nullable();
-            $table->timestamps();
-
-            $table->foreign('cliente_id')->references('id')->on('clientes')->nullOnDelete();
-            $table->foreign('usuario_id')->references('id')->on('usuarios')->nullOnDelete();
-        });
-    }
+public function up()
+{
+    Schema::create('ventas', function (Blueprint $table) {
+        $table->id(); // Id
+        
+        // Cliente_id (Relacionado con la tabla users)
+        $table->foreignId('cliente_id')->constrained('users');
+        
+        // Usuario_id (El empleado que hizo la venta, puede ser nulo si fue venta web)
+        $table->foreignId('usuario_id')->nullable()->constrained('users');
+        
+        $table->decimal('total', 10, 2); // Total
+        $table->string('metodo_pago'); // Metodo_pago
+        
+        // Fecha (created_at sirve como fecha, pero agregamos una explícita si quieres)
+        $table->timestamp('fecha')->useCurrent(); 
+        
+        $table->timestamps();
+    });
+}
 
     public function down(): void {
         Schema::dropIfExists('ventas');

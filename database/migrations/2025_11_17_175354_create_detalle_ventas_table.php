@@ -5,20 +5,24 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void {
-        Schema::create('detalle_ventas', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('venta_id');
-            $table->unsignedBigInteger('product_id');
-            $table->integer('cantidad');
-            $table->decimal('precio_unitario', 10, 2);
-            $table->decimal('subtotal', 10, 2);
-            $table->timestamps();
-
-            $table->foreign('venta_id')->references('id')->on('ventas')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('productos')->onDelete('cascade');
-        });
-    }
+public function up()
+{
+    Schema::create('detalle_ventas', function (Blueprint $table) {
+        $table->id(); // id
+        
+        // venta_id (Si se borra la venta, se borran los detalles)
+        $table->foreignId('venta_id')->constrained('ventas')->onDelete('cascade');
+        
+        // product_id (Relación con productos)
+        $table->foreignId('producto_id')->constrained('productos');
+        
+        $table->integer('cantidad'); // cantidad
+        $table->decimal('precio_unitario', 10, 2); // precio_unitario
+        $table->decimal('subtotal', 10, 2); // subtotal
+        
+        $table->timestamps();
+    });
+}
 
     public function down(): void {
         Schema::dropIfExists('detalle_ventas');

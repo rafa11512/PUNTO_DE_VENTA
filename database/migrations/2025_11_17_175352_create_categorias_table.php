@@ -5,13 +5,18 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void {
-        Schema::create('categorias', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre');
-            $table->timestamps();
-        });
-    }
+public function up()
+{
+    Schema::create('categorias', function (Blueprint $table) {
+        $table->id();
+        $table->string('nombre');
+        // Agregamos el campo para la imagen (puede ser nulo por si no tienes foto al principio)
+        $table->string('imagen')->nullable(); 
+        $table->timestamps();
+    });
+}
+
+
 
     public function down(): void {
         Schema::dropIfExists('categorias');
