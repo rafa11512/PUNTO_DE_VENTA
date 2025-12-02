@@ -43,13 +43,13 @@
                 </div>
 
                 <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Teléfono</label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Telefono</label>
                     <input type="text" name="telefono" value="{{ old('telefono') }}"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Dirección</label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Direccion</label>
                     <textarea name="direccion" rows="3"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ old('direccion') }}</textarea>
                 </div>

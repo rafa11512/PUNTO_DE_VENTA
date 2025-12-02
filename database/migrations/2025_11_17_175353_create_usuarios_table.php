@@ -12,14 +12,10 @@ public function up()
         $table->id(); // Id
         $table->string('name'); // Nombre (Laravel usa 'name' por defecto)
         $table->string('email')->unique(); // Email (Laravel usa 'email' por defecto)
-        $table->string('password'); // Contraseña/Password
-        
-        // --- Campos específicos de tu lista de CLIENTES ---
+        $table->string('password'); // Contraseña/Password        
         $table->string('telefono')->nullable(); // Telefono
-        $table->text('direccion')->nullable(); // Direccion
-        
-        // --- Campos específicos de tu lista de USUARIOS ---
-        // Rol: controlará si es admin o cliente
+        $table->text('direccion')->nullable(); // Direccion        
+        // Rol: si es admin o cliente
         $table->enum('rol', ['admin', 'cliente'])->default('cliente'); 
         
         $table->timestamps(); // Fecha_creacion (created_at)

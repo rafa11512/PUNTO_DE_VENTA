@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex justify-between items-center mb-6">
-        <h3 class="text-gray-700 text-3xl font-medium">Gestión de Productos</h3>
+        <h3 class="text-gray-700 text-3xl font-medium">Gestion de Productos</h3>
 
         <a href="{{ route('admin.productos.create') }}"
             class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded shadow">
@@ -27,17 +27,16 @@
         <form method="GET" action="{{ route('admin.productos.index') }}" class="flex flex-wrap gap-4 items-end">
             <div class="flex-1 min-w-[200px]">
                 <label class="block text-gray-700 text-sm font-bold mb-2">Buscar por nombre</label>
-                <input type="text" name="buscar" value="{{ request('buscar') }}"
-                    placeholder="Nombre del producto..."
+                <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Nombre del producto..."
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
 
             <div class="w-48">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Categoría</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Categoria</label>
                 <select name="categoria"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="">Todas las categorías</option>
-                    @foreach($categorias as $cat)
+                    <option value="">Todas las categorias</option>
+                    @foreach ($categorias as $cat)
                         <option value="{{ $cat->id }}" {{ request('categoria') == $cat->id ? 'selected' : '' }}>
                             {{ $cat->nombre }}
                         </option>
@@ -65,7 +64,7 @@
                     <th class="py-3 px-6 text-left">ID</th>
                     <th class="py-3 px-6 text-left">Imagen</th>
                     <th class="py-3 px-6 text-left">Nombre</th>
-                    <th class="py-3 px-6 text-left">Categoría</th>
+                    <th class="py-3 px-6 text-left">Categoria</th>
                     <th class="py-3 px-6 text-right">Costo</th>
                     <th class="py-3 px-6 text-right">Precio</th>
                     <th class="py-3 px-6 text-center">Stock</th>
@@ -77,10 +76,9 @@
                     <tr class="border-b border-gray-200 hover:bg-gray-100">
                         <td class="py-3 px-6 text-left whitespace-nowrap font-bold">{{ $producto->id }}</td>
                         <td class="py-3 px-6 text-left">
-                            @if($producto->imagen)
-                                <img src="{{ asset('storage/' . $producto->imagen) }}"
-                                     alt="{{ $producto->nombre }}"
-                                     class="h-12 w-12 object-cover rounded">
+                            @if ($producto->imagen)
+                                <img src="{{ asset('storage/' . $producto->imagen) }}" alt="{{ $producto->nombre }}"
+                                    class="h-12 w-12 object-cover rounded">
                             @else
                                 <div class="h-12 w-12 bg-gray-200 rounded flex items-center justify-center">
                                     <i class="fa-solid fa-image text-gray-400"></i>
@@ -89,7 +87,7 @@
                         </td>
                         <td class="py-3 px-6 text-left">
                             <div class="font-medium">{{ $producto->nombre }}</div>
-                            @if($producto->descripcion)
+                            @if ($producto->descripcion)
                                 <div class="text-xs text-gray-500">{{ Str::limit($producto->descripcion, 50) }}</div>
                             @endif
                         </td>
@@ -103,7 +101,7 @@
                             ${{ number_format($producto->precio, 2) }}
                         </td>
                         <td class="py-3 px-6 text-center">
-                            @if($producto->stock <= 5)
+                            @if ($producto->stock <= 5)
                                 <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">
                                     {{ $producto->stock }}
                                 </span>
@@ -147,7 +145,7 @@
 
         @if ($productos->isEmpty())
             <div class="p-6 text-center text-gray-500">
-                No hay productos registrados aún. Agrega uno para comenzar a vender.
+                No hay productos registrados aun. Agrega uno para comenzar a vender.
             </div>
         @endif
     </div>

@@ -40,7 +40,7 @@
                         </a>
                     </li>
 
-                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-4 mb-2 px-4">Gestión
+                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-4 mb-2 px-4">Gestion
                     </div>
 
                     <li>

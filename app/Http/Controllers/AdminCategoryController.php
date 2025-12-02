@@ -13,7 +13,7 @@ class AdminCategoryController extends Controller
      */
     public function index()
     {
-        // Obtener todas las categorías con el conteo de productos
+        // Obtener todas las categorias con el conteo de productos
         $categorias = Categoria::withCount('productos')->orderBy('nombre', 'asc')->get();
 
         return view('admin.categorias.index', compact('categorias'));
@@ -58,7 +58,7 @@ class AdminCategoryController extends Controller
             $data['imagen'] = $ruta;
         }
 
-        // Crear la categoría
+        // Crear la categoria
         Categoria::create($data);
 
         return redirect()->route('admin.categorias.index')
@@ -70,7 +70,7 @@ class AdminCategoryController extends Controller
      */
     public function show(string $id)
     {
-        // Opcional: mostrar detalle de la categoría con sus productos
+        //mostrar detalle de la categoria con sus productos
         $categoria = Categoria::with('productos')->findOrFail($id);
 
         return view('admin.categorias.show', compact('categoria'));
@@ -81,7 +81,7 @@ class AdminCategoryController extends Controller
      */
     public function edit(string $id)
     {
-        // Obtener la categoría con el conteo de productos
+        // Obtener la categoria con el conteo de productos
         $categoria = Categoria::withCount('productos')->findOrFail($id);
 
         return view('admin.categorias.edit', compact('categoria'));
@@ -94,7 +94,7 @@ class AdminCategoryController extends Controller
     {
         $categoria = Categoria::findOrFail($id);
 
-        // Validar los datos (ignorar el nombre actual en la validación de unique)
+        // Validar los datos (ignoramoa el nombre actual en la validacion de unique)
         $request->validate([
             'nombre' => 'required|string|max:255|unique:categorias,nombre,' . $id,
             'imagen' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
@@ -112,7 +112,7 @@ class AdminCategoryController extends Controller
             'nombre' => $request->nombre,
         ];
 
-        // Manejar la nueva imagen si se subió una
+        // Manejar la nueva imagen si se subio
         if ($request->hasFile('imagen')) {
             // Eliminar la imagen anterior si existe
             if ($categoria->imagen && Storage::disk('public')->exists($categoria->imagen)) {
@@ -126,7 +126,7 @@ class AdminCategoryController extends Controller
             $data['imagen'] = $ruta;
         }
 
-        // Actualizar la categoría
+        // Actualizar la categoria
         $categoria->update($data);
 
         return redirect()->route('admin.categorias.index')
@@ -154,7 +154,7 @@ class AdminCategoryController extends Controller
             Storage::disk('public')->delete($categoria->imagen);
         }
 
-        // Eliminar la categoría
+        // Eliminar la categoria
         $categoria->delete();
 
         return redirect()->route('admin.categorias.index')

@@ -26,19 +26,22 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 <div class="md:col-span-2">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Nombre del Producto <span class="text-red-500">*</span></label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Nombre del Producto <span
+                            class="text-red-500">*</span></label>
                     <input type="text" name="nombre" value="{{ old('nombre') }}" required
                         placeholder="Ej: Elote con queso, Esquite grande, Refresco..."
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-emerald-500">
                 </div>
 
                 <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Categoría <span class="text-red-500">*</span></label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Categoria <span
+                            class="text-red-500">*</span></label>
                     <select name="categoria_id" required
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-emerald-500">
-                        <option value="">Selecciona una categoría</option>
-                        @foreach($categorias as $categoria)
-                            <option value="{{ $categoria->id }}" {{ old('categoria_id') == $categoria->id ? 'selected' : '' }}>
+                        <option value="">Selecciona una categoria</option>
+                        @foreach ($categorias as $categoria)
+                            <option value="{{ $categoria->id }}"
+                                {{ old('categoria_id') == $categoria->id ? 'selected' : '' }}>
                                 {{ $categoria->nombre }}
                             </option>
                         @endforeach
@@ -46,36 +49,39 @@
                 </div>
 
                 <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Stock Inicial <span class="text-red-500">*</span></label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Stock Inicial <span
+                            class="text-red-500">*</span></label>
                     <input type="number" name="stock" value="{{ old('stock', 0) }}" required min="0"
                         placeholder="Cantidad disponible"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-emerald-500">
                 </div>
 
                 <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Costo <span class="text-red-500">*</span></label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Costo <span
+                            class="text-red-500">*</span></label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
-                        <input type="number" name="costo" value="{{ old('costo') }}" required min="0" step="0.01"
-                            placeholder="0.00"
+                        <input type="number" name="costo" value="{{ old('costo') }}" required min="0"
+                            step="0.01" placeholder="0.00"
                             class="shadow appearance-none border rounded w-full py-2 pl-7 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-emerald-500">
                     </div>
-                    <p class="text-gray-500 text-xs mt-1">Costo de producción o compra</p>
+                    <p class="text-gray-500 text-xs mt-1">Costo de produccion o compra</p>
                 </div>
 
                 <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Precio de Venta <span class="text-red-500">*</span></label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Precio de Venta <span
+                            class="text-red-500">*</span></label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
-                        <input type="number" name="precio" value="{{ old('precio') }}" required min="0" step="0.01"
-                            placeholder="0.00"
+                        <input type="number" name="precio" value="{{ old('precio') }}" required min="0"
+                            step="0.01" placeholder="0.00"
                             class="shadow appearance-none border rounded w-full py-2 pl-7 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-emerald-500">
                     </div>
-                    <p class="text-gray-500 text-xs mt-1">Precio al que se venderá al cliente</p>
+                    <p class="text-gray-500 text-xs mt-1">Precio al que se vendera al cliente</p>
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Descripcion</label>
                     <textarea name="descripcion" rows="3"
                         placeholder="Descripción detallada del producto (ingredientes, características, etc.)"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-emerald-500">{{ old('descripcion') }}</textarea>

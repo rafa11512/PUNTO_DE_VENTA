@@ -48,7 +48,7 @@
                 <label class="block text-sm font-medium text-slate-700 mb-1">Contraseña</label>
                 <input type="password" name="password" required
                     class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                    placeholder="Mínimo 6 caracteres">
+                    placeholder="Minimo 6 caracteres">
             </div>
 
             <div>

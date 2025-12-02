@@ -16,12 +16,12 @@ class AdminProductController extends Controller
     {
         $query = Producto::with('categoria');
 
-        // Filtro por búsqueda de nombre
+        // filtro por busqueda de nombre
         if ($request->filled('buscar')) {
             $query->where('nombre', 'like', '%' . $request->buscar . '%');
         }
 
-        // Filtro por categoría
+        // filtro por categoria
         if ($request->filled('categoria')) {
             $query->where('categoria_id', $request->categoria);
         }
@@ -159,7 +159,7 @@ class AdminProductController extends Controller
             'descripcion' => $request->descripcion,
         ];
 
-        // Manejar la nueva imagen si se subió una
+        // Manejar la nueva imagen si se subio una
         if ($request->hasFile('imagen')) {
             // Eliminar la imagen anterior si existe
             if ($producto->imagen && Storage::disk('public')->exists($producto->imagen)) {
@@ -186,15 +186,6 @@ class AdminProductController extends Controller
     public function destroy(string $id)
     {
         $producto = Producto::findOrFail($id);
-
-        // Verificar si tiene ventas asociadas (opcional, depende de tu lógica)
-        // Descomenta esto si quieres evitar que se eliminen productos con ventas
-        /*
-        if ($producto->detalles()->count() > 0) {
-            return redirect()->route('admin.productos.index')
-                ->with('error', 'No se puede eliminar el producto porque tiene ventas registradas');
-        }
-        */
 
         // Eliminar la imagen si existe
         if ($producto->imagen && Storage::disk('public')->exists($producto->imagen)) {

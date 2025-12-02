@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    // --- FUNCIONES DE LOGIN Y LOGOUT ---
+    // --- FUNCIONES DE LOGIN Y LOGOUT
 
     //MOSTRAR EL FORMULARIO DE LOGIN
     public function showLoginForm()
@@ -31,7 +31,7 @@ class AuthController extends Controller
             // OBTENEMOS EL USUARIO LOGUEADO
             $user = Auth::user();
 
-            // --- LOGICA DE REDIRECCIÓN ---
+            // LOGICA DE REDIRECCION
             if ($user->rol === 'admin') {
                 return redirect()->route('admin.dashboard');
             } else {

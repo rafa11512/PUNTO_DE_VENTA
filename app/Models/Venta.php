@@ -9,7 +9,7 @@ use App\Models\User;
 class Venta extends Model
 {
     protected $fillable = [
-        'cliente_id', 'usuario_id', 'total', 'fecha', 'metodo_pago'
+        'cliente_id', 'usuario_id', 'total', 'fecha', 'metodo_pago','estado'
     ];
 
     public function cliente() {

@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="flex justify-between items-center mb-6">
-        <h3 class="text-gray-700 text-3xl font-medium">Gestión de Categorías</h3>
+        <h3 class="text-gray-700 text-3xl font-medium">Gestión de Categorias</h3>
 
         <a href="{{ route('admin.categorias.create') }}"
             class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded shadow">
-            <i class="fa-solid fa-plus mr-2"></i> Nueva Categoría
+            <i class="fa-solid fa-plus mr-2"></i> Nueva Categoria
         </a>
     </div>
 
@@ -32,10 +32,9 @@
                     <tr class="border-b border-gray-200 hover:bg-gray-100">
                         <td class="py-3 px-6 text-left whitespace-nowrap font-bold">{{ $categoria->id }}</td>
                         <td class="py-3 px-6 text-left">
-                            @if($categoria->imagen)
-                                <img src="{{ asset('storage/' . $categoria->imagen) }}"
-                                     alt="{{ $categoria->nombre }}"
-                                     class="h-12 w-12 object-cover rounded">
+                            @if ($categoria->imagen)
+                                <img src="{{ asset('storage/' . $categoria->imagen) }}" alt="{{ $categoria->nombre }}"
+                                    class="h-12 w-12 object-cover rounded">
                             @else
                                 <div class="h-12 w-12 bg-gray-200 rounded flex items-center justify-center">
                                     <i class="fa-solid fa-image text-gray-400"></i>
@@ -78,7 +77,7 @@
 
         @if ($categorias->isEmpty())
             <div class="p-6 text-center text-gray-500">
-                No hay categorías registradas aún. Crea una para organizar tus productos de elotes.
+                No hay categorias registradas aun. Crea una para organizar tus productos de elotes.
             </div>
         @endif
     </div>

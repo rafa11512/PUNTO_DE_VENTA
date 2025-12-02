@@ -13,7 +13,7 @@ public function up()
         // venta_id (Si se borra la venta, se borran los detalles)
         $table->foreignId('venta_id')->constrained('ventas')->onDelete('cascade');
         
-        // product_id (Relación con productos)
+        // product_id (Relacion con productos)
         $table->foreignId('producto_id')->constrained('productos');
         
         $table->integer('cantidad'); // cantidad

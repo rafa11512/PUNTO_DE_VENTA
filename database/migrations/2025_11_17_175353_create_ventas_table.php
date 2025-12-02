@@ -19,6 +19,10 @@ public function up()
         $table->decimal('total', 10, 2); // Total
         $table->string('metodo_pago'); // Metodo_pago
         
+        $table->enum('estado', ['pendiente', 'en_preparacion', 'completado', 'cancelado'])
+                  ->default('pendiente')
+                  ->after('metodo_pago');
+
         // Fecha (created_at sirve como fecha, pero agregamos una explícita si quieres)
         $table->timestamp('fecha')->useCurrent(); 
         
@@ -26,7 +30,10 @@ public function up()
     });
 }
 
-    public function down(): void {
-        Schema::dropIfExists('ventas');
+public function down(): void
+    {
+        Schema::table('ventas', function (Blueprint $table) {
+            $table->dropColumn('estado');
+        });
     }
 };

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
@@ -7,43 +9,75 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Venta;
 use App\Models\DetalleVenta;
 use App\Models\Producto;
+use App\Models\Categoria;
 
 class ClientController extends Controller
 {
-    public function index()
+    /**
+     * PAGINA DE INICIO (HOME)
+     * Muestra slider, categorias, productos destacados y acerca de.
+     */
+public function index(Request $request)
     {
-        return view('cliente.home'); // Retorna la vista de la tienda
+        // logica de filtrado (antes estaba en 'productos')
+        $query = Producto::with('categoria')->where('stock', '>', 0);
+
+        if($request->filled('categoria')) {
+            $query->where('categoria_id', $request->input('categoria'));
+        }
+
+        $productos = $query->orderBy('nombre', 'asc')->get();
+        $categorias = Categoria::all(); 
+
+        // Retornamos la vista home con los datos
+        return view('cliente.home', compact('productos', 'categorias'));
     }
 
-    public function productos()
+    /**
+     * CATALOGO COMPLETO
+     */
+    public function productos(Request $request)
     {
-        // Obtener productos desde la base de datos y enviarlos a la vista
-        $productos = Producto::with('categoria')->orderBy('nombre', 'asc')->get();
-        return view('cliente.productos', compact('productos'));
+        $query = Producto::with('categoria')->where('stock', '>', 0);
+
+        if($request->filled('categoria')) {
+            $query->where('categoria_id', $request->input('categoria'));
+        }
+
+        $productos = $query->orderBy('nombre', 'asc')->get();
+        $categorias = Categoria::all(); // Para el filtro
+
+        return view('cliente.productos', compact('productos', 'categorias'));
     }
 
+    /**
+     * VISTA DEL CARRITO
+     */
     public function carrito()
     {
-        // Mostrar los items del carrito almacenados en la sesión
-        // session structure: ['product_id' => ['quantity' => 1], ...]
-        // Map product ids to product models
         $cart = request()->session()->get('cart', []);
         $cartDetails = [];
+        $total = 0;
+
         foreach ($cart as $productId => $item) {
             $product = Producto::find($productId);
             if ($product) {
+                $subtotal = $product->precio * ($item['quantity'] ?? 1);
+                $total += $subtotal;
+                
                 $cartDetails[] = [
                     'producto' => $product,
-                    'quantity' => $item['quantity'] ?? 1
+                    'quantity' => $item['quantity'] ?? 1,
+                    'subtotal' => $subtotal
                 ];
             }
         }
 
-        return view('cliente.carrito', compact('cartDetails'));
+        return view('cliente.carrito', compact('cartDetails', 'total'));
     }
 
     /**
-     * Agrega un producto al carrito (simple, basado en sesión).
+     * AGREGAR AL CARRITO
      */
     public function agregarCarrito(Request $request)
     {
@@ -51,84 +85,67 @@ class ClientController extends Controller
             'product_id' => 'required|integer|exists:productos,id',
         ]);
 
+        // Si no esta logueado, lo mandamos al login
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Inicia sesión para agregar productos.');
+        }
+
         $producto = Producto::findOrFail($data['product_id']);
 
         if ($producto->stock <= 0) {
-            return Redirect::back()->with('error', 'Producto no disponible');
+            return Redirect::back()->with('error', 'Producto agotado temporalmente.');
         }
 
         $cart = $request->session()->get('cart', []);
-
         $currentQuantity = isset($cart[$producto->id]) ? $cart[$producto->id]['quantity'] : 0;
         $newQuantity = $currentQuantity + 1;
 
-        // No superar el stock disponible
         if ($newQuantity > $producto->stock) {
-            return Redirect::back()->with('error', 'No hay suficiente stock disponible');
+            return Redirect::back()->with('error', 'No hay suficiente stock disponible.');
         }
 
-        $cart[$producto->id] = [
-            'quantity' => $newQuantity
-        ];
-
+        $cart[$producto->id] = ['quantity' => $newQuantity];
         $request->session()->put('cart', $cart);
 
-        return Redirect::back()->with('success', 'Producto agregado al carrito');
+        return Redirect::back()->with('success', '¡Agregado al carrito!');
     }
 
     /**
-     * Pagar el carrito: crea una Venta y DetalleVenta por cada item del carrito,
-     * descuenta stock y limpia la sesión del carrito.
+     * PAGAR CARRITO (CON TRANSACCION)
      */
     public function pagarCarrito(Request $request)
     {
-        // Validar que exista carrito
         $cart = $request->session()->get('cart', []);
-        if (empty($cart)) {
-            return Redirect::back()->with('error', 'El carrito está vacío');
-        }
-
-        // Verificar que el usuario esté autenticado
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Debes iniciar sesión para pagar');
-        }
+        if (empty($cart)) return Redirect::back()->with('error', 'El carrito está vacío');
+        if (!Auth::check()) return redirect()->route('login');
 
         $user = Auth::user();
-
-        // Construir el pedido: comprobar stock y calcular total
         $total = 0;
         $items = [];
+
+        // 1. Validar Stock (Sin descontar aun)
         foreach ($cart as $productId => $entry) {
-            $cantidad = isset($entry['quantity']) ? intval($entry['quantity']) : 1;
             $producto = Producto::find($productId);
-            if (!$producto) {
-                return Redirect::back()->with('error', 'Un producto en el carrito no existe');
+            if (!$producto || $entry['quantity'] > $producto->stock) {
+                return Redirect::back()->with('error', "Stock insuficiente para: " . ($producto->nombre ?? 'Producto'));
             }
-            if ($cantidad > $producto->stock) {
-                return Redirect::back()->with('error', "No hay suficiente stock para el producto: {$producto->nombre}");
-            }
-            $subtotal = $producto->precio * $cantidad;
+            $subtotal = $producto->precio * $entry['quantity'];
             $total += $subtotal;
-            $items[] = [
-                'producto' => $producto,
-                'cantidad' => $cantidad,
-                'subtotal' => $subtotal,
-            ];
+            $items[] = ['producto' => $producto, 'cantidad' => $entry['quantity'], 'subtotal' => $subtotal];
         }
 
-        // Crear venta y detalles dentro de una transacción
+        // 2. Transaccion
         DB::beginTransaction();
         try {
             $venta = Venta::create([
                 'cliente_id' => $user->id,
-                'usuario_id' => null,
                 'total' => $total,
                 'fecha' => now(),
                 'metodo_pago' => 'Pago online',
+                'estado' => 'pendiente' // Inicia pendiente
             ]);
 
             foreach ($items as $it) {
-                // Crear el detalle con la columna producto_id (migrations)
                 DetalleVenta::create([
                     'venta_id' => $venta->id,
                     'producto_id' => $it['producto']->id,
@@ -136,21 +153,30 @@ class ClientController extends Controller
                     'precio_unitario' => $it['producto']->precio,
                     'subtotal' => $it['subtotal'],
                 ]);
-
-                // Descontar stock
-                $it['producto']->stock = $it['producto']->stock - $it['cantidad'];
-                $it['producto']->save();
             }
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return Redirect::back()->with('error', 'Error al crear el pedido: ' . $e->getMessage());
+            return Redirect::back()->with('error', 'Error: ' . $e->getMessage());
         }
 
-        // Limpiar carrito
         $request->session()->forget('cart');
+        return Redirect::route('client.pedidos')->with('success', 'Pedido realizado con éxito. Estado: Pendiente.');
+    }
 
-        return Redirect::route('client.carrito')->with('success', 'Compra realizada. Tu pedido fue registrado correctamente.');
+    /**
+     * HISTORIAL DE PEDIDOS DEL CLIENTE
+     */
+    public function misPedidos()
+    {
+        if (!Auth::check()) return redirect()->route('login');
+
+        $pedidos = Venta::where('cliente_id', Auth::id())
+                        ->with('detalles.producto')
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+        return view('cliente.pedidos.index', compact('pedidos'));
     }
 }

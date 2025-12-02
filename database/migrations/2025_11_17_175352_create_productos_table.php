@@ -12,10 +12,9 @@ public function up()
         $table->id();
         $table->string('nombre');
         $table->decimal('costo', 10, 2);
-        $table->decimal('precio', 10, 2); // Agregué precio de venta si faltaba
+        $table->decimal('precio', 10, 2); 
         $table->integer('stock');
         $table->text('descripcion')->nullable();
-        
         // Campo para la imagen del producto
         $table->string('imagen')->nullable(); 
         

@@ -10,7 +10,7 @@ public function up()
     Schema::create('categorias', function (Blueprint $table) {
         $table->id();
         $table->string('nombre');
-        // Agregamos el campo para la imagen (puede ser nulo por si no tienes foto al principio)
+        //campo para la imagen (puede ser nulo si no se sube imagen)
         $table->string('imagen')->nullable(); 
         $table->timestamps();
     });

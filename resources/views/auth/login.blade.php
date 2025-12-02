@@ -18,7 +18,7 @@
                 class="mx-auto w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl mb-4">
                 🌽</i>
             </div>
-            <h2 class="text-2xl font-bold text-slate-800">Bienvenido de nuevo</h2>
+            <h2 class="text-2xl font-bold text-slate-800">Bienvenido</h2>
             <p class="text-slate-500 text-sm mt-1">Ingresa tus datos para continuar</p>
         </div>
 
