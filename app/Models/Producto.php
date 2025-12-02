@@ -15,6 +15,6 @@ class Producto extends Model
     }
 
     public function detalles() {
-        return $this->hasMany(DetalleVenta::class, 'product_id');
+        return $this->hasMany(DetalleVenta::class, 'producto_id');
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminClientController;// Controlador para la gestion de
 // Importaciones para Categorias y Productos (Admin)
 use App\Http\Controllers\AdminCategoryController; 
 use App\Http\Controllers\AdminProductController;
+use App\Http\Controllers\AdminPedidoController;
 
 // Si entran a la raiz, los mandamos al login
 Route::get('/', function () {
@@ -25,6 +26,12 @@ Route::post('/registro', [AuthController::class, 'register'])->name('register.su
 
 Route::get('/tienda', [ClientController::class, 'index'])->name('client.home');
 
+//mio cambio
+Route::get('/productos', [ClientController::class, 'productos'])->name('client.productos');
+Route::get('/carrito', [ClientController::class, 'carrito'])->name('client.carrito');
+Route::post('/carrito/agregar', [ClientController::class, 'agregarCarrito'])->name('client.carrito.agregar');
+Route::post('/carrito/pagar', [ClientController::class, 'pagarCarrito'])->name('client.carrito.pagar');
+
 Route::middleware(['auth'])->group(function () {
 
     // --- GRUPO DE RUTAS DEL ADMINISTRADOR ---
@@ -35,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
     // NUEVO: Gestion de Categorias y Productos --- Esto habilita las rutas index, create, store, edit, update, destroy automaticamente
     Route::resource('categorias', AdminCategoryController::class);
     Route::resource('productos', AdminProductController::class);
+    // Rutas para Pedidos (Ventas) en admin
+    Route::resource('pedidos', AdminPedidoController::class);
     });
 
     // --- GRUPO DE RUTAS DEL CLIENTE ---

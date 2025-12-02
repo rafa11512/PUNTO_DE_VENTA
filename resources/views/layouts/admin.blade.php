@@ -71,7 +71,7 @@
                     </div>
 
                     <li>
-                        <a href="#"
+                        <a href="{{ route('admin.pedidos.index') }}"
                             class="nav-item flex items-center p-3 rounded-lg text-slate-300 hover:text-white transition-colors">
                             <i class="fa-solid fa-cart-shopping w-6 text-center"></i>
                             <span class="ml-3">Pedidos</span>

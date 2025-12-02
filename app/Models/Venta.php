@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\User;
+
 class Venta extends Model
 {
     protected $fillable = [
@@ -11,11 +13,11 @@ class Venta extends Model
     ];
 
     public function cliente() {
-        return $this->belongsTo(Cliente::class);
+        return $this->belongsTo(User::class, 'cliente_id');
     }
 
     public function usuario() {
-        return $this->belongsTo(Usuario::class);
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 
     public function detalles() {

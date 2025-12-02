@@ -9,7 +9,7 @@ class DetalleVenta extends Model
     protected $table = 'detalle_ventas';
 
     protected $fillable = [
-        'venta_id', 'product_id', 'cantidad', 'precio_unitario', 'subtotal'
+        'venta_id', 'producto_id', 'cantidad', 'precio_unitario', 'subtotal'
     ];
 
     public function venta() {
@@ -17,6 +17,6 @@ class DetalleVenta extends Model
     }
 
     public function producto() {
-        return $this->belongsTo(Producto::class, 'product_id');
+        return $this->belongsTo(Producto::class, 'producto_id');
     }
 }

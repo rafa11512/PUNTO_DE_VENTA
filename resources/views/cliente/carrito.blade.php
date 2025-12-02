@@ -76,7 +76,66 @@
 
     <!-- CONTENIDO PRINCIPAL -->
     <div class="container mx-auto px-6 py-12">
-        <h1>BIENVENIDO</h1>
+        @if(session('success'))
+            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">{{ session('success') }}</div>
+        @endif
+        @if(session('error'))
+            <div class="mb-4 p-4 bg-red-100 text-red-800 rounded">{{ session('error') }}</div>
+        @endif
+        <h1 class="text-2xl font-semibold mb-6">CARRITO</h1>
+
+        @if(isset($cartDetails) && count($cartDetails) > 0)
+            <div class="bg-white shadow rounded p-6">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr>
+                            <th class="pb-2">Producto</th>
+                            <th class="pb-2">Precio</th>
+                            <th class="pb-2">Cantidad</th>
+                            <th class="pb-2">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $total = 0; @endphp
+                        @foreach($cartDetails as $item)
+                            @php
+                                $prod = $item['producto'];
+                                $quantity = $item['quantity'];
+                                $subtotal = $prod->precio * $quantity;
+                                $total += $subtotal;
+                            @endphp
+                            <tr class="border-t">
+                                <td class="py-3">
+                                    <div class="flex items-center gap-4">
+                                        <img src="{{ $prod->imagen ? asset('storage/' . $prod->imagen) : 'https://via.placeholder.com/80' }}" alt="{{ $prod->nombre }}" class="w-20 h-20 object-cover rounded">
+                                        <div>
+                                            <div class="font-semibold">{{ $prod->nombre }}</div>
+                                            <div class="text-sm text-gray-500">{{ $prod->categoria ? $prod->categoria->nombre : '' }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3">$ {{ number_format($prod->precio, 0, ',', '.') }}</td>
+                                <td class="py-3">{{ $quantity }}</td>
+                                <td class="py-3">$ {{ number_format($subtotal, 0, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="text-right mt-4 font-bold">Total: $ {{ number_format($total, 0, ',', '.') }}</div>
+                <div class="text-right mt-3">
+                    @auth
+                        <form action="{{ route('client.carrito.pagar') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Pagar Carrito</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-500">Inicia sesión para pagar</a>
+                    @endauth
+                </div>
+            </div>
+        @else
+            <div class="bg-white shadow rounded p-6 text-gray-600">No hay productos en el carrito.</div>
+        @endif
     </div>
 
 </body>
